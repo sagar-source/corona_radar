@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.coronaradar.API.API;
 import com.example.coronaradar.Adapter.CoronaAdapter;
@@ -278,9 +277,9 @@ public class MainActivity extends AppCompatActivity {
                                     list.add(coronaList.get(i));
 
                                 }
-                                else {
-                                    noData();
-                                }
+                            }
+                            if (list.isEmpty()) {
+                                noData();
                             }
                             showData(list);
 
@@ -292,9 +291,10 @@ public class MainActivity extends AppCompatActivity {
                                     list.add(coronaList.get(i));
 
                                 }
-                                else {
-                                    noData();
-                                }
+
+                            }
+                            if (list.isEmpty()) {
+                                noData();
                             }
                             showData(list);
                         }
@@ -310,9 +310,9 @@ public class MainActivity extends AppCompatActivity {
                                     list.add(coronaList.get(i));
 
                                 }
-                                else {
-                                    noData();
-                                }
+                            }
+                            if (list.isEmpty()) {
+                                noData();
                             }
                             showData(list);
 
@@ -324,9 +324,9 @@ public class MainActivity extends AppCompatActivity {
                                     list.add(coronaList.get(i));
 
                                 }
-                                else {
-                                    noData();
-                                }
+                            }
+                            if (list.isEmpty()) {
+                                noData();
                             }
                             showData(list);
                         }
@@ -343,9 +343,9 @@ public class MainActivity extends AppCompatActivity {
                                     list.add(coronaList.get(i));
 
                                 }
-                                else {
-                                    noData();
-                                }
+                            }
+                            if (list.isEmpty()) {
+                                noData();
                             }
                             showData(list);
 
@@ -357,16 +357,16 @@ public class MainActivity extends AppCompatActivity {
                                     list.add(coronaList.get(i));
 
                                 }
-                                else {
-                                    noData();
-                                }
+                            }
+                            if (list.isEmpty()) {
+                                noData();
                             }
                             showData(list);
                         }
                     }
                 }
                 else {
-                    showData(list);
+                    showData(coronaList);
                 }
             }
         });
@@ -389,9 +389,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void noData() {
+
+        prog_dialog.dismiss();
+
         Snackbar snackbar = Snackbar
                 .make(linearLayout, "No Data Found!", Snackbar.LENGTH_LONG);
         snackbar.show();
+
     }
 
     private void showData(List<Corona> l) {
@@ -409,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (!sharedPreferences.getString("CASE_TYPE","").equals("") &&
                 !sharedPreferences.getString("VAL","").equals("") &&
-                  !sharedPreferences.getString("EDT_VAL","").equals("")) {
+                !sharedPreferences.getString("EDT_VAL","").equals("")) {
 
             showData(list);
 
