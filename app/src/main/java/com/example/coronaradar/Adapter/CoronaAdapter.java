@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.coronaradar.Model.Cases;
 import com.example.coronaradar.Model.Corona;
 import com.example.coronaradar.R;
 
@@ -17,9 +18,9 @@ import java.util.List;
 public class CoronaAdapter extends RecyclerView.Adapter<CoronaAdapter.IssueViewHolder> {
 
     Context mCtx;
-    List<Corona> coronaList;
+    List<Cases> coronaList;
 
-    public CoronaAdapter(Context mCtx, List<Corona> coronaList) {
+    public CoronaAdapter(Context mCtx, List<Cases> coronaList) {
         this.mCtx = mCtx;
         this.coronaList = coronaList;
     }
@@ -34,9 +35,9 @@ public class CoronaAdapter extends RecyclerView.Adapter<CoronaAdapter.IssueViewH
     @Override
     public void onBindViewHolder(@NonNull IssueViewHolder holder, final int position) {
      holder.txt_country.setText(coronaList.get(position).getCountry());
-     holder.txt_total.setText(String.valueOf(coronaList.get(position).getConfirmed()));
-     holder.txt_recovered.setText(String.valueOf(coronaList.get(position).getRecovered()));
-     holder.txt_deaths.setText(String.valueOf(coronaList.get(position).getDeaths()));
+     holder.txt_total.setText(String.valueOf(coronaList.get(position).getTotalConfirmed()));
+     holder.txt_recovered.setText(String.valueOf(coronaList.get(position).getTotalRecovered()));
+     holder.txt_deaths.setText(String.valueOf(coronaList.get(position).getTotalDeaths()));
     }
 
     @Override

@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-   public static String BASE_URL = "https://covid-19-data.p.rapidapi.com/country/";
+   public static String BASE_URL = "https://api.covid19api.com/";
 
     public static Retrofit retrofit;
 

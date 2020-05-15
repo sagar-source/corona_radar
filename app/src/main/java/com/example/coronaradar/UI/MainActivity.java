@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.coronaradar.API.API;
 import com.example.coronaradar.Adapter.CoronaAdapter;
+import com.example.coronaradar.Model.Cases;
 import com.example.coronaradar.Model.Corona;
 import com.example.coronaradar.R;
 import com.example.coronaradar.NetworkClient.RetrofitClient;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList list_case_type,list_val;
 
-    List<Corona> list;
+    List<Cases> list;
 
     Button btn_filter;
 
@@ -119,59 +120,62 @@ public class MainActivity extends AppCompatActivity {
 
         API api = retrofit.create(API.class);
 
-        Observable<List<Corona>> call = api.getCorona();
+        Observable<Corona> call = api.getCorona();
         call.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
-                .subscribe(new DisposableObserver<List<Corona>>() {
+                .subscribe(new DisposableObserver<Corona>() {
 
-                    @Override
-                    public void onNext(List<Corona> coronaList) {
-                        int sum_total = 0,sum_recover = 0,sum_death = 0;
+            @Override
+            public void onNext(Corona corona) {
 
-                        for (int i=0; i<coronaList.size(); i++) {
+                List<Cases> coronaList = corona.getCountries();
 
-                            if (coronaList.get(i).getConfirmed() == 0) {
-                                coronaList.remove(i);
-                                i--;
-                            }
-                            Collections.sort(coronaList,Corona.confirmedcases);
-                            Collections.reverse(coronaList);
+                int sum_total = 0, sum_recover = 0, sum_death = 0;
 
-                            btn_filter.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
+                for (int i = 0; i < coronaList.size(); i++) {
 
-                                    applyFilter(coronaList);
+                    if (coronaList.get(i).getTotalConfirmed() == 0) {
+                        coronaList.remove(i);
+                        i--;
+                    }
+                    Collections.sort(coronaList, Cases.confirmedcases);
+                    Collections.reverse(coronaList);
 
-                                }
-                            });
+                    btn_filter.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-                            sum_total +=coronaList.get(i).getConfirmed();
-                            sum_recover +=coronaList.get(i).getRecovered();
-                            sum_death +=coronaList.get(i).getDeaths();
+                            applyFilter(coronaList);
+
                         }
+                    });
 
-                        total.setText(String.valueOf(sum_total));
-                        recover.setText(String.valueOf(sum_recover));
-                        death.setText(String.valueOf(sum_death));
+                    sum_total += coronaList.get(i).getTotalConfirmed();
+                    sum_recover += coronaList.get(i).getTotalRecovered();
+                    sum_death += coronaList.get(i).getTotalDeaths();
+                }
 
-                        showData(coronaList);
+                total.setText(String.valueOf(sum_total));
+                recover.setText(String.valueOf(sum_recover));
+                death.setText(String.valueOf(sum_death));
 
-                    }
+                showData(coronaList);
 
-                    @Override
-                    public void onError(Throwable e) {
+            }
 
-                    }
+            @Override
+            public void onError(Throwable e) {
 
-                    @Override
-                    public void onComplete() {
+            }
 
-                    }
-                });
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
-    private void applyFilter(List<Corona> coronaList) {
+    private void applyFilter(List<Cases> coronaList) {
 
         dialog.setContentView(R.layout.filter_layout);
 
@@ -272,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (VAL.equals("Greater than equal")) {
                             for (int i=0; i<coronaList.size(); i++){
-                                if (coronaList.get(i).getConfirmed() >= Integer.parseInt(EDT_VAL)) {
+                                if (coronaList.get(i).getTotalConfirmed() >= Integer.parseInt(EDT_VAL)) {
 
                                     list.add(coronaList.get(i));
 
@@ -286,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         else if (VAL.equals("Less than equal")) {
                             for (int i=0; i<coronaList.size(); i++){
-                                if (coronaList.get(i).getConfirmed() <= Integer.parseInt(EDT_VAL)) {
+                                if (coronaList.get(i).getTotalConfirmed() <= Integer.parseInt(EDT_VAL)) {
 
                                     list.add(coronaList.get(i));
 
@@ -305,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (VAL.equals("Greater than equal")) {
                             for (int i=0; i<coronaList.size(); i++){
-                                if (coronaList.get(i).getRecovered() >= Integer.parseInt(EDT_VAL)) {
+                                if (coronaList.get(i).getTotalRecovered() >= Integer.parseInt(EDT_VAL)) {
 
                                     list.add(coronaList.get(i));
 
@@ -319,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         else if (VAL.equals("Less than equal")) {
                             for (int i=0; i<coronaList.size(); i++){
-                                if (coronaList.get(i).getRecovered() <= Integer.parseInt(EDT_VAL)) {
+                                if (coronaList.get(i).getTotalRecovered() <= Integer.parseInt(EDT_VAL)) {
 
                                     list.add(coronaList.get(i));
 
@@ -338,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (VAL.equals("Greater than equal")) {
                             for (int i=0; i<coronaList.size(); i++){
-                                if (coronaList.get(i).getDeaths() >= Integer.parseInt(EDT_VAL)) {
+                                if (coronaList.get(i).getTotalDeaths() >= Integer.parseInt(EDT_VAL)) {
 
                                     list.add(coronaList.get(i));
 
@@ -352,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         else if (VAL.equals("Less than equal")) {
                             for (int i=0; i<coronaList.size(); i++){
-                                if (coronaList.get(i).getDeaths() <= Integer.parseInt(EDT_VAL)) {
+                                if (coronaList.get(i).getTotalDeaths() <= Integer.parseInt(EDT_VAL)) {
 
                                     list.add(coronaList.get(i));
 
@@ -398,7 +402,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void showData(List<Corona> l) {
+    private void showData(List<Cases> l) {
         adapter = new CoronaAdapter(MainActivity.this, l);
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
