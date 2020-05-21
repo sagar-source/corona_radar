@@ -121,8 +121,8 @@ public class MainActivity extends AppCompatActivity {
         API api = retrofit.create(API.class);
 
         Observable<Corona> call = api.getCorona();
-        call.observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
+        call.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<Corona>() {
 
             @Override
